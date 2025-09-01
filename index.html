@@ -1,0 +1,1618 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Torneio Fura-Balão</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+        :root {
+            --primary-color: #6a11cb;
+            --secondary-color: #2575fc;
+            --background-color: #f0f2f5;
+            --card-color: #ffffff;
+            --text-color: #333333;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --edit-color: #ffc107;
+            --star-color: #f8d74b;
+            --font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            background-attachment: fixed;
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        nav button {
+            background-color: #fff;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        nav button.active,
+        nav button:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            margin-top: 30px;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-family: var(--font-family);
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 10px;
+        }
+        
+        button.gerar-btn {
+            background-color: #34495e;
+            margin-bottom: 20px;
+        }
+
+        button.gerar-btn:hover {
+            background-color: #2c3e50;
+        }
+
+        button:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-excluir {
+            background-color: var(--danger-color);
+            margin-left: 10px;
+        }
+
+        .btn-excluir:hover {
+            background-color: #c82333;
+        }
+
+        .btn-editar {
+            background-color: var(--edit-color);
+            margin-left: 10px;
+        }
+
+        .btn-editar:hover {
+            background-color: #e0a800;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: var(--secondary-color);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .btn-actions {
+            white-space: nowrap;
+        }
+
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .carrinho-card {
+            background-color: var(--card-color);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 300px;
+            text-align: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .carrinho-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .carrinho-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .carrinho-card h3 {
+            margin: 0;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .carrinho-card p {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .avaliacao-area {
+            margin-top: 15px;
+            border-top: 1px dashed #ccc;
+            padding-top: 15px;
+        }
+
+        .criterio-group {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .criterio-group label {
+            font-weight: 600;
+            color: #555;
+            flex-grow: 1;
+            text-align: left;
+            margin-right: 10px;
+        }
+
+        .star-rating {
+            display: inline-block;
+            unicode-bidi: bidi-override;
+            direction: rtl;
+        }
+
+        .star-rating span {
+            display: inline-block;
+            position: relative;
+            width: 1.1em;
+            cursor: pointer;
+            font-size: 1.5em;
+            color: #ccc;
+            transition: color 0.2s ease;
+        }
+
+        .star-rating span.rated {
+            color: var(--star-color);
+        }
+
+        .pontuacao-total {
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-weight: 700;
+            color: var(--secondary-color);
+        }
+        
+        .torneio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .arena-card {
+            background-color: var(--card-color);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        
+        .arena-card h3 {
+            text-align: center;
+            color: var(--secondary-color);
+            margin-top: 0;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+        }
+        
+        .combate-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 5px;
+            border-bottom: 1px dashed #ccc;
+        }
+        
+        .combate-item:last-child {
+            border-bottom: none;
+        }
+
+        .combat-title {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .vencedor-select {
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .vencedores-container {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e9f5ff;
+            border: 1px solid var(--secondary-color);
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .vencedores-container h4 {
+            margin: 0;
+            color: var(--secondary-color);
+        }
+
+        .vencedores-container ul {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0 0;
+            font-weight: 600;
+        }
+
+        .vencedores-container li {
+            padding: 5px;
+        }
+        
+        .vencedor-label {
+            font-size: 0.8em;
+            color: var(--success-color);
+            font-weight: 600;
+        }
+        
+        .vencedor-final {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: var(--success-color);
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .classificacao-desfile {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #ddd;
+        }
+
+        .classificacao-desfile table,
+        .classificacao-final table {
+            width: 100%;
+            text-align: center;
+        }
+
+        .classificacao-desfile th,
+        .classificacao-desfile td,
+        .classificacao-final th,
+        .classificacao-final td {
+            text-align: center;
+        }
+
+        .first-place {
+            background-color: #ffd700;
+        }
+        .second-place {
+            background-color: #c0c0c0;
+        }
+        .third-place {
+            background-color: #cd7f32;
+        }
+        
+        #empate-desfile {
+            margin-top: 20px;
+            padding: 15px;
+            border: 2px dashed var(--edit-color);
+            border-radius: 10px;
+            background-color: #fff9e6;
+            text-align: center;
+            display: none;
+        }
+
+        #empate-desfile p {
+            margin: 0 0 10px 0;
+            color: var(--edit-color);
+            font-weight: 600;
+        }
+        #btn-declarar-vencedor {
+            background-color: var(--edit-color);
+        }
+        #btn-declarar-vencedor:hover {
+            background-color: #e0a800;
+        }
+
+        .combat-card {
+            background-color: var(--card-color);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+        }
+
+        .combat-card h4 {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .combat-details {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        
+        .combat-team {
+            flex-basis: 45%;
+        }
+        
+        .combat-team p {
+            font-weight: 700;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+
+        .combat-team .round-counter {
+            font-size: 0.9em;
+            color: #888;
+            font-weight: 600;
+        }
+
+        .combat-details .vs-separator {
+            color: var(--secondary-color);
+            font-weight: 700;
+            font-size: 1.2em;
+        }
+
+        .combat-actions {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .btn-vencedor-round, .btn-vencedor-final-round {
+            background-color: var(--secondary-color);
+            font-size: 14px;
+            padding: 8px 12px;
+            margin-top: 0;
+        }
+
+        .btn-vencedor-round:hover, .btn-vencedor-final-round:hover {
+            background-color: var(--primary-color);
+        }
+
+        .champion-banner {
+            background-color: var(--success-color);
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 700;
+            margin-top: 20px;
+        }
+        
+        #final-placares {
+            margin-top: 20px;
+        }
+        
+        .torneio-grid .champion-banner {
+            background-color: #4CAF50;
+        }
+        
+        .combate-vencedor {
+            border: 2px solid #4CAF50;
+            background-color: #e8f5e9;
+        }
+        
+        .arena-wrapper {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .arena-wrapper h3 {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .round-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #555;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .vencedor-arena-final {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: var(--success-color);
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .combate-vazio {
+            background-color: #f9f9f9;
+            color: #aaa;
+            text-align: center;
+        }
+        
+        .combate-bye {
+            background-color: #f0f0f0;
+            border: 2px dashed #999;
+        }
+        
+        .combate-bye .champion-banner {
+            background-color: #999;
+        }
+        
+        .group-card {
+            background-color: #e8f5e9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .group-card h4 {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Torneio Fura-Balão</h1>
+        <nav>
+            <button class="nav-button active" data-section="cadastros">Cadastros</button>
+            <button class="nav-button" data-section="desfile">Desfile</button>
+            <button class="nav-button" data-section="fase1">Fase 1 - Torneio</button>
+            <button class="nav-button" data-section="fase2">Fase 2 - Final</button>
+        </nav>
+    </header>
+
+    <!-- Seção de Cadastros -->
+    <div id="cadastros" class="section active">
+        <h2>Cadastro de Carrinhos</h2>
+        <form id="form-carrinho">
+            <input type="hidden" id="carrinho-id">
+            <div class="form-group">
+                <label for="nome-equipe">Nome da Equipe</label>
+                <input type="text" id="nome-equipe" required>
+            </div>
+            <div class="form-group">
+                <label for="nome-membros">Nome dos Membros</label>
+                <input type="text" id="nome-membros" required>
+            </div>
+            <div class="form-group">
+                <label for="nome-professor">Nome do Professor ou Monitor</label>
+                <input type="text" id="nome-professor" required>
+            </div>
+            <div class="form-group">
+                <label for="nome-escola">Nome da Escola</label>
+                <input type="text" id="nome-escola" required>
+            </div>
+            <div class="form-group">
+                <label for="descricao-carrinho">Descrição do Carrinho</label>
+                <textarea id="descricao-carrinho" rows="3" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="url-imagem">URL da Imagem do Carrinho</label>
+                <input type="text" id="url-imagem" required>
+            </div>
+            <button type="submit" id="btn-salvar-carrinho">Salvar Carrinho</button>
+        </form>
+        <button id="btn-gerar-participantes" class="gerar-btn">Gerar Participantes de Teste (34 carrinhos)</button>
+        <h2>Carrinhos Cadastrados</h2>
+        <div id="lista-carrinhos">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nome da Equipe</th>
+                        <th>Escola</th>
+                        <th>Membros</th>
+                        <th>Professor/Monitor</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="carrinhos-table-body">
+                    <!-- Carrinhos aqui -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Seção de Desfile -->
+    <div id="desfile" class="section">
+        <h2>Desfile de Carrinhos</h2>
+        <div class="card-container" id="desfile-carrinhos">
+            <!-- Cards aqui -->
+        </div>
+        
+        <!-- Classificação do Desfile -->
+        <div class="classificacao-desfile">
+            <h2>Classificação do Desfile (Top 3)</h2>
+            <div id="classificacao-table-container">
+                <!-- Tabela de classificação será renderizada aqui -->
+            </div>
+            <div id="empate-desfile">
+                <p>Houve um empate na pontuação total. Por favor, selecione o vencedor para o desempate:</p>
+                <select id="vencedor-empate-select"></select>
+                <button id="btn-declarar-vencedor">Declarar Vencedor do Desempate</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Seção do Torneio Fase 1 -->
+    <div id="fase1" class="section">
+        <h2 id="fase1-title">Fase 1 - Combates por Arena</h2>
+        <button id="btn-sortear-combates">Sortear Combates</button>
+        <div id="fase1-combates">
+            <!-- Combates de todas as arenas serão renderizados aqui -->
+        </div>
+        <div class="vencedores-container mt-8" id="vencedores-fase1" style="display: none;">
+            <h4>Campeões das Arenas</h4>
+            <ul id="lista-vencedores-fase1"></ul>
+        </div>
+    </div>
+
+    <!-- Seção do Torneio Fase 2 -->
+    <div id="fase2" class="section">
+        <h2>Fase 2 - Final</h2>
+        <button id="btn-iniciar-final" style="display: none;">Iniciar Final</button>
+        <div id="final-combates" class="torneio-grid">
+            <!-- Combates da final aqui -->
+        </div>
+        <div id="final-placares" style="display: none;">
+            <!-- O placar final será renderizado aqui -->
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- Gerenciamento de Seções ---
+        const navButtons = document.querySelectorAll('.nav-button');
+        const sections = document.querySelectorAll('.section');
+
+        navButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                navButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                sections.forEach(section => section.classList.remove('active'));
+                const targetSectionId = button.dataset.section;
+                document.getElementById(targetSectionId).classList.add('active');
+                
+                if (targetSectionId === 'desfile') renderDesfile();
+                if (targetSectionId === 'fase1') renderFase1();
+                if (targetSectionId === 'fase2') renderFase2();
+            });
+        });
+
+        // --- Variáveis Globais e Dados no LocalStorage ---
+        let carrinhos = JSON.parse(localStorage.getItem('carrinhos')) || [];
+        let avaliacoes = JSON.parse(localStorage.getItem('avaliacoes')) || {};
+        let torneioState = JSON.parse(localStorage.getItem('torneioState')) || {};
+        let finalistasFase2 = JSON.parse(localStorage.getItem('finalistasFase2')) || [];
+        let finalCombates = JSON.parse(localStorage.getItem('finalCombates')) || null;
+        let finalWins = JSON.parse(localStorage.getItem('finalWins')) || {};
+        let finalRanking = JSON.parse(localStorage.getItem('finalRanking')) || null;
+        
+        const arenas = [
+            { id: 1, nome: 'Arena 1', tamanho: 8 },
+            { id: 2, nome: 'Arena 2', tamanho: 8 },
+            { id: 3, nome: 'Arena 3', tamanho: 8 },
+            { id: 4, nome: 'Arena 4 - Delta', tamanho: 10 }
+        ];
+
+        // --- Seção de Cadastros ---
+        const formCarrinho = document.getElementById('form-carrinho');
+        const carrinhoIdInput = document.getElementById('carrinho-id');
+        const carrinhosTableBody = document.getElementById('carrinhos-table-body');
+        const btnGerarParticipantes = document.getElementById('btn-gerar-participantes');
+
+        function renderCarrinhos() {
+            carrinhosTableBody.innerHTML = '';
+            carrinhos.forEach(carrinho => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${carrinho.nomeEquipe}</td>
+                    <td>${carrinho.escola}</td>
+                    <td>${carrinho.nomeMembros}</td>
+                    <td>${carrinho.nomeProfessor}</td>
+                    <td class="btn-actions">
+                        <button class="btn-editar" data-id="${carrinho.id}" data-type="carrinho">Editar</button>
+                        <button class="btn-excluir" data-id="${carrinho.id}" data-type="carrinho">Excluir</button>
+                    </td>
+                `;
+                carrinhosTableBody.appendChild(row);
+            });
+        }
+        
+        formCarrinho.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const id = carrinhoIdInput.value;
+            const novoCarrinho = {
+                id: id ? parseInt(id) : Date.now(),
+                nomeEquipe: document.getElementById('nome-equipe').value,
+                nomeMembros: document.getElementById('nome-membros').value,
+                nomeProfessor: document.getElementById('nome-professor').value,
+                escola: document.getElementById('nome-escola').value,
+                descricao: document.getElementById('descricao-carrinho').value,
+                urlImagem: document.getElementById('url-imagem').value
+            };
+            
+            if (id) {
+                carrinhos = carrinhos.map(c => c.id === parseInt(id) ? novoCarrinho : c);
+            } else {
+                carrinhos.push(novoCarrinho);
+            }
+            localStorage.setItem('carrinhos', JSON.stringify(carrinhos));
+            formCarrinho.reset();
+            carrinhoIdInput.value = '';
+            renderCarrinhos();
+        });
+        
+        document.getElementById('lista-carrinhos').addEventListener('click', (e) => {
+            if (e.target.dataset.type === 'carrinho') {
+                const id = parseInt(e.target.dataset.id);
+                if (e.target.classList.contains('btn-excluir')) {
+                    carrinhos = carrinhos.filter(c => c.id !== id);
+                    localStorage.setItem('carrinhos', JSON.stringify(carrinhos));
+                    renderCarrinhos();
+                } else if (e.target.classList.contains('btn-editar')) {
+                    const carrinhoParaEditar = carrinhos.find(c => c.id === id);
+                    carrinhoIdInput.value = carrinhoParaEditar.id;
+                    document.getElementById('nome-equipe').value = carrinhoParaEditar.nomeEquipe;
+                    document.getElementById('nome-membros').value = carrinhoParaEditar.nomeMembros;
+                    document.getElementById('nome-professor').value = carrinhoParaEditar.nomeProfessor;
+                    document.getElementById('nome-escola').value = carrinhoParaEditar.escola;
+                    document.getElementById('descricao-carrinho').value = carrinhoParaEditar.descricao;
+                    document.getElementById('url-imagem').value = carrinhoParaEditar.urlImagem;
+                }
+            }
+        });
+
+        // Função para gerar participantes de teste
+        function gerarParticipantesDeTeste() {
+            const escolas = ["Escola A", "Escola B", "Escola C", "Escola D", "Escola E", "Escola F", "Escola G", "Escola H", "Escola I", "Escola J", "Escola K", "Escola L", "Escola M", "Escola N", "Escola O", "Escola P", "Escola Q"];
+            const novosCarrinhos = [];
+            let id = Date.now();
+            
+            escolas.forEach(escola => {
+                for(let i = 1; i <= 2; i++) {
+                    novosCarrinhos.push({
+                        id: id++,
+                        nomeEquipe: `Equipe ${escola.split(' ')[1]}${i}`,
+                        nomeMembros: `Membro 1, Membro 2`,
+                        nomeProfessor: `Prof. ${escola.split(' ')[1]}`,
+                        escola: escola,
+                        descricao: `Carrinho de teste da ${escola}.`,
+                        urlImagem: `https://placehold.co/300x200/${Math.floor(Math.random()*16777215).toString(16)}/fff?text=Carrinho+${novosCarrinhos.length + 1}`
+                    });
+                }
+            });
+            carrinhos = novosCarrinhos;
+            localStorage.setItem('carrinhos', JSON.stringify(carrinhos));
+            
+            // Gerar pontuações aleatórias para o desfile
+            const novasAvaliacoes = {};
+            novosCarrinhos.forEach(carrinho => {
+                novasAvaliacoes[carrinho.id] = {
+                    criatividade: Math.floor(Math.random() * 5) + 1,
+                    estetica: Math.floor(Math.random() * 5) + 1,
+                    sustentabilidade: Math.floor(Math.random() * 5) + 1,
+                    tema: Math.floor(Math.random() * 5) + 1
+                };
+            });
+            avaliacoes = novasAvaliacoes;
+            localStorage.setItem('avaliacoes', JSON.stringify(avaliacoes));
+
+            localStorage.removeItem('torneioState');
+            localStorage.removeItem('finalistasFase2');
+            localStorage.removeItem('finalCombates');
+            localStorage.removeItem('finalWins');
+            localStorage.removeItem('finalWinner');
+            localStorage.removeItem('finalRanking');
+            alert('34 participantes de teste gerados com sucesso, com pontuações de desfile aleatórias!');
+            renderCarrinhos();
+        }
+
+        btnGerarParticipantes.addEventListener('click', gerarParticipantesDeTeste);
+        
+        renderCarrinhos();
+
+        // --- Seção de Desfile ---
+        const desfileContainer = document.getElementById('desfile-carrinhos');
+        const classificacaoTableContainer = document.getElementById('classificacao-table-container');
+        const empateDesfileContainer = document.getElementById('empate-desfile');
+        const vencedorEmpateSelect = document.getElementById('vencedor-empate-select');
+        const btnDeclararVencedor = document.getElementById('btn-declarar-vencedor');
+
+        function renderDesfile() {
+            desfileContainer.innerHTML = '';
+            if (carrinhos.length === 0) {
+                desfileContainer.innerHTML = '<p style="text-align: center; color: #888;">Nenhum carrinho cadastrado para o desfile.</p>';
+                return;
+            }
+
+            carrinhos.forEach(carrinho => {
+                const card = document.createElement('div');
+                card.className = 'carrinho-card';
+                
+                const avaliacoesCarrinho = avaliacoes[carrinho.id] || {};
+                const criatividade = avaliacoesCarrinho.criatividade || 0;
+                const estetica = avaliacoesCarrinho.estetica || 0;
+                const sustentabilidade = avaliacoesCarrinho.sustentabilidade || 0;
+                const tema = avaliacoesCarrinho.tema || 0;
+
+                card.innerHTML = `
+                    <img src="${carrinho.urlImagem}" alt="Imagem do carrinho" onerror="this.src='https://placehold.co/300x200/cccccc/333333?text=Imagem+Nao+Encontrada'">
+                    <h3>${carrinho.nomeEquipe}</h3>
+                    <p>Membros: ${carrinho.nomeMembros}</p>
+                    <p>Escola: ${carrinho.escola}</p>
+                    <p>Descrição: ${carrinho.descricao}</p>
+                    <div class="avaliacao-area">
+                        <h4>Avaliação do Desfile</h4>
+                        <div class="criterio-group">
+                            <label>Criatividade e Originalidade:</label>
+                            <div class="star-rating" data-id="${carrinho.id}" data-criterio="criatividade" data-rating="${criatividade}">
+                                ${'<span>&#9733;</span>'.repeat(5)}
+                            </div>
+                        </div>
+                        <div class="criterio-group">
+                            <label>Estética e Acabamento:</label>
+                            <div class="star-rating" data-id="${carrinho.id}" data-criterio="estetica" data-rating="${estetica}">
+                                ${'<span>&#9733;</span>'.repeat(5)}
+                            </div>
+                        </div>
+                        <div class="criterio-group">
+                            <label>Sustentabilidade:</label>
+                            <div class="star-rating" data-id="${carrinho.id}" data-criterio="sustentabilidade" data-rating="${sustentabilidade}">
+                                ${'<span>&#9733;</span>'.repeat(5)}
+                            </div>
+                        </div>
+                        <div class="criterio-group">
+                            <label>Tema e Conceito:</label>
+                            <div class="star-rating" data-id="${carrinho.id}" data-criterio="tema" data-rating="${tema}">
+                                ${'<span>&#9733;</span>'.repeat(5)}
+                            </div>
+                        </div>
+                        <div class="pontuacao-total" id="total-${carrinho.id}">Total: 0</div>
+                    </div>
+                `;
+                desfileContainer.appendChild(card);
+                updateStars(carrinho.id, 'criatividade', criatividade);
+                updateStars(carrinho.id, 'estetica', estetica,);
+                updateStars(carrinho.id, 'sustentabilidade', sustentabilidade);
+                updateStars(carrinho.id, 'tema', tema);
+                calcularTotal(carrinho.id);
+            });
+            renderClassificacaoDesfile();
+        }
+        
+        function calcularTotal(carrinhoId) {
+            const avaliacao = avaliacoes[carrinhoId] || {};
+            const total = (avaliacao.criatividade || 0) + 
+                          (avaliacao.estetica || 0) +
+                          (avaliacao.sustentabilidade || 0) +
+                          (avaliacao.tema || 0);
+            const totalElement = document.getElementById(`total-${carrinhoId}`);
+            if (totalElement) {
+                totalElement.textContent = `Total: ${total}`;
+            }
+            return total;
+        }
+
+        function updateStars(carrinhoId, criterio, rating) {
+            const ratingElement = desfileContainer.querySelector(`.star-rating[data-id="${carrinhoId}"][data-criterio="${criterio}"]`);
+            if (ratingElement) {
+                const stars = ratingElement.querySelectorAll('span');
+                stars.forEach((star, index) => {
+                    if (4 - index < rating) {
+                        star.classList.add('rated');
+                    } else {
+                        star.classList.remove('rated');
+                    }
+                });
+            }
+        }
+
+        desfileContainer.addEventListener('click', (e) => {
+            const target = e.target;
+            if (target.matches('.star-rating span')) {
+                const parent = target.parentElement;
+                const id = parent.dataset.id;
+                const criterio = parent.dataset.criterio;
+                const stars = Array.from(parent.children);
+                const rating = stars.length - stars.indexOf(target);
+
+                avaliacoes[id] = avaliacoes[id] || {};
+                avaliacoes[id][criterio] = rating;
+                localStorage.setItem('avaliacoes', JSON.stringify(avaliacoes));
+
+                updateStars(id, criterio, rating);
+                calcularTotal(id);
+                localStorage.removeItem('desempateId');
+                renderClassificacaoDesfile();
+            }
+        });
+
+        desfileContainer.addEventListener('mouseover', (e) => {
+            const target = e.target;
+            if (target.matches('.star-rating span')) {
+                const parent = target.parentElement;
+                const stars = Array.from(parent.children);
+                const hoverIndex = stars.indexOf(target);
+                
+                stars.forEach((star, index) => {
+                    if (index >= hoverIndex) {
+                        star.classList.add('rated');
+                    } else {
+                        star.classList.remove('rated');
+                    }
+                });
+            }
+        });
+
+        desfileContainer.addEventListener('mouseout', (e) => {
+            const target = e.target;
+            if (target.matches('.star-rating span')) {
+                const parent = target.parentElement;
+                const id = parent.dataset.id;
+                const criterio = parent.dataset.criterio;
+                const rating = avaliacoes[id]?.[criterio] || 0;
+                updateStars(id, criterio, rating);
+            }
+        });
+
+        function renderClassificacaoDesfile() {
+            const desempateId = localStorage.getItem('desempateId');
+
+            const classificacao = carrinhos.map(carrinho => {
+                const pontuacaoTotal = calcularTotal(carrinho.id);
+                return { 
+                    ...carrinho,
+                    pontuacaoTotal,
+                    isVencedorDesempate: carrinho.id === parseInt(desempateId)
+                };
+            });
+
+            classificacao.sort((a, b) => {
+                if (a.isVencedorDesempate && !b.isVencedorDesempate) return -1;
+                if (!a.isVencedorDesempate && b.isVencedorDesempate) return 1;
+                return b.pontuacaoTotal - a.pontuacaoTotal;
+            });
+
+            const top3 = classificacao.slice(0, 3);
+            
+            let tableHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Posição</th>
+                            <th>Equipe</th>
+                            <th>Escola</th>
+                            <th>Pontuação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            top3.forEach((equipe, index) => {
+                let rowClass = '';
+                if (index === 0) rowClass = 'first-place';
+                else if (index === 1) rowClass = 'second-place';
+                else if (index === 2) rowClass = 'third-place';
+                
+                tableHTML += `
+                    <tr class="${rowClass}">
+                        <td>${index + 1}º</td>
+                        <td>${equipe.nomeEquipe}</td>
+                        <td>${equipe.escola}</td>
+                        <td>${equipe.pontuacaoTotal}</td>
+                    </tr>
+                `;
+            });
+            
+            tableHTML += `
+                    </tbody>
+                </table>
+            `;
+            
+            classificacaoTableContainer.innerHTML = top3.length > 0 ? tableHTML : '<p style="text-align: center; color: #888;">Nenhuma avaliação para exibir a classificação.</p>';
+
+            const hasTie = top3.length > 1 && top3[0].pontuacaoTotal === top3[1].pontuacaoTotal;
+            const hasDesempateWinner = !!desempateId;
+
+            if (hasTie && !hasDesempateWinner) {
+                empateDesfileContainer.style.display = 'block';
+                vencedorEmpateSelect.innerHTML = '';
+                top3.filter(c => c.pontuacaoTotal === top3[0].pontuacaoTotal).forEach(carrinho => {
+                    const option = document.createElement('option');
+                    option.value = carrinho.id;
+                    option.textContent = carrinho.nomeEquipe;
+                    vencedorEmpateSelect.appendChild(option);
+                });
+            } else {
+                empateDesfileContainer.style.display = 'none';
+            }
+        }
+
+        btnDeclararVencedor.addEventListener('click', () => {
+            const vencedorId = vencedorEmpateSelect.value;
+            if (vencedorId) {
+                localStorage.setItem('desempateId', vencedorId);
+                renderClassificacaoDesfile();
+            }
+        });
+
+
+        // --- Seção do Torneio Fase 1 ---
+        const btnSortearCombates = document.getElementById('btn-sortear-combates');
+        const fase1CombatesContainer = document.getElementById('fase1-combates');
+        const fase1VencedoresContainer = document.getElementById('vencedores-fase1');
+        const listaVencedoresFase1 = document.getElementById('lista-vencedores-fase1');
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function getCarrinhoById(id) {
+            return carrinhos.find(c => c.id === id);
+        }
+        
+        function createBracket(teams, arenaId, arenaNome) {
+            const bracket = { id: arenaId, nome: arenaNome, rounds: [] };
+            let currentTeams = [...teams];
+            if (arenaId === 4) {
+                const groupA = currentTeams.slice(0, 5);
+                const groupB = currentTeams.slice(5, 10);
+                
+                const playInA = { id: `arena-${arenaId}-round-0-combat-0`, stage: 'Play-in', team1: groupA[0], team2: groupA[1], rounds: [0, 0], winner: null };
+                const playInB = { id: `arena-${arenaId}-round-0-combat-1`, stage: 'Play-in', team1: groupB[0], team2: groupB[1], rounds: [0, 0], winner: null };
+                
+                const semiA1 = { id: `arena-${arenaId}-round-1-combat-0`, stage: 'Semifinal Grupo A', team1: { nomeEquipe: 'Vencedor Play-in A' }, team2: groupA[2], rounds: [0, 0], winner: null };
+                const semiA2 = { id: `arena-${arenaId}-round-1-combat-1`, stage: 'Semifinal Grupo A', team1: groupA[3], team2: groupA[4], rounds: [0, 0], winner: null };
+                const semiB1 = { id: `arena-${arenaId}-round-1-combat-2`, stage: 'Semifinal Grupo B', team1: { nomeEquipe: 'Vencedor Play-in B' }, team2: groupB[2], rounds: [0, 0], winner: null };
+                const semiB2 = { id: `arena-${arenaId}-round-1-combat-3`, stage: 'Semifinal Grupo B', team1: groupB[3], team2: groupB[4], rounds: [0, 0], winner: null };
+                
+                const finalA = { id: `arena-${arenaId}-round-2-combat-0`, stage: 'Final Grupo A', team1: { nomeEquipe: 'Vencedor Semi A1' }, team2: { nomeEquipe: 'Vencedor Semi A2' }, rounds: [0, 0], winner: null };
+                const finalB = { id: `arena-${arenaId}-round-2-combat-1`, stage: 'Final Grupo B', team1: { nomeEquipe: 'Vencedor Semi B1' }, team2: { nomeEquipe: 'Vencedor Semi B2' }, rounds: [0, 0], winner: null };
+                
+                const finalArena4 = { id: `arena-${arenaId}-round-3-combat-0`, stage: 'Final Arena Delta', team1: { nomeEquipe: 'Vencedor Final A' }, team2: { nomeEquipe: 'Vencedor Final B' }, rounds: [0, 0], winner: null };
+                
+                bracket.rounds.push({ stage: 'Play-in', combats: [playInA, playInB] });
+                bracket.rounds.push({ stage: 'Semifinais de Grupo', combats: [semiA1, semiA2, semiB1, semiB2] });
+                bracket.rounds.push({ stage: 'Finais de Grupo', combats: [finalA, finalB] });
+                bracket.rounds.push({ stage: 'Final da Arena', combats: [finalArena4] });
+            } else { // Arenas 1, 2, 3 (8 teams)
+                const teamsCopy = [...currentTeams];
+                const rounds = [
+                    { stage: 'Quartas de Final', combats: [] },
+                    { stage: 'Semifinais', combats: [] },
+                    { stage: 'Final da Arena', combats: [] }
+                ];
+
+                // Round 1: Quartas de Final
+                for (let i = 0; i < 4; i++) {
+                    rounds[0].combats.push({
+                        id: `arena-${arenaId}-round-0-combat-${i}`,
+                        team1: teamsCopy[i * 2],
+                        team2: teamsCopy[i * 2 + 1],
+                        rounds: [0, 0],
+                        winner: null
+                    });
+                }
+
+                // Round 2: Semifinais
+                for (let i = 0; i < 2; i++) {
+                    rounds[1].combats.push({
+                        id: `arena-${arenaId}-round-1-combat-${i}`,
+                        team1: { nomeEquipe: `Vencedor QF ${i * 2 + 1}` }, // Placeholder
+                        team2: { nomeEquipe: `Vencedor QF ${i * 2 + 2}` }, // Placeholder
+                        rounds: [0, 0],
+                        winner: null
+                    });
+                }
+
+                // Round 3: Final
+                rounds[2].combats.push({
+                    id: `arena-${arenaId}-round-2-combat-0`,
+                    team1: { nomeEquipe: `Vencedor SF 1` }, // Placeholder
+                    team2: { nomeEquipe: `Vencedor SF 2` }, // Placeholder
+                    rounds: [0, 0],
+                    winner: null
+                });
+                
+                bracket.rounds = rounds;
+            }
+            return bracket;
+        }
+
+        function getStageName(roundIndex, teamsCount) {
+            if (teamsCount === 8) return 'Quartas de Final';
+            if (teamsCount === 4) return 'Semifinais';
+            if (teamsCount === 2) return 'Final da Arena';
+            return `Rodada ${roundIndex + 1}`;
+        }
+        
+        function sortearCombates() {
+            if (carrinhos.length !== 34) {
+                alert("É necessário ter exatamente 34 carrinhos cadastrados (8 + 8 + 8 + 10) para o torneio.");
+                return;
+            }
+            
+            const shuffledTeams = [...carrinhos];
+            shuffleArray(shuffledTeams);
+
+            const teamsPerArena = {
+                1: shuffledTeams.slice(0, 8),
+                2: shuffledTeams.slice(8, 16),
+                3: shuffledTeams.slice(16, 24),
+                4: shuffledTeams.slice(24, 34)
+            };
+
+            torneioState = {};
+            arenas.forEach(arena => {
+                const teams = teamsPerArena[arena.id];
+                torneioState[arena.id] = createBracket(teams, arena.id, arena.nome);
+            });
+
+            localStorage.setItem('torneioState', JSON.stringify(torneioState));
+            renderFase1();
+        }
+
+        function renderFase1() {
+            fase1CombatesContainer.innerHTML = '';
+            fase1VencedoresContainer.style.display = 'none';
+            btnSortearCombates.style.display = 'block';
+
+            if (Object.keys(torneioState).length === 0) {
+                 fase1CombatesContainer.innerHTML = '<p style="text-align: center; color: #888;">Clique em "Sortear Combates" para iniciar a Fase 1.</p>';
+                return;
+            }
+            btnSortearCombates.style.display = 'none';
+            
+            let allArenasComplete = true;
+
+            arenas.forEach(arena => {
+                const arenaData = torneioState[arena.id];
+                
+                if (!arenaData || !arenaData.rounds) {
+                    fase1CombatesContainer.innerHTML += `<div class="arena-wrapper"><h3>${arena.nome}</h3><p style="text-align: center; color: #888;">Dados de combate corrompidos. Por favor, clique em Sortear Combates novamente.</p></div>`;
+                    allArenasComplete = false;
+                    return;
+                }
+                
+                const arenaWrapper = document.createElement('div');
+                arenaWrapper.className = 'arena-wrapper';
+                arenaWrapper.innerHTML = `<h3>${arena.nome}</h3>`;
+                
+                let arenaComplete = true;
+                
+                if (arena.id === 4) {
+                    const groupAWrapper = document.createElement('div');
+                    groupAWrapper.className = 'group-card';
+                    groupAWrapper.innerHTML = `<h4>Grupo A</h4>`;
+                    
+                    const groupBWrapper = document.createElement('div');
+                    groupBWrapper.className = 'group-card';
+                    groupBWrapper.innerHTML = `<h4>Grupo B</h4>`;
+
+                    arenaData.rounds.forEach((round, roundIndex) => {
+                        const roundTitle = document.createElement('h5');
+                        roundTitle.className = 'round-title';
+                        roundTitle.textContent = round.stage;
+                        
+                        const combatsGrid = document.createElement('div');
+                        combatsGrid.className = 'torneio-grid';
+
+                        if (roundIndex < 3) { // Rounds for groups
+                            let groupA_combats = round.combats.slice(0, round.combats.length / 2);
+                            let groupB_combats = round.combats.slice(round.combats.length / 2);
+                            
+                            groupAWrapper.appendChild(roundTitle.cloneNode(true));
+                            groupBWrapper.appendChild(roundTitle);
+                            
+                            const groupACombatGrid = document.createElement('div');
+                            groupACombatGrid.className = 'torneio-grid';
+                            groupA_combats.forEach(combat => {
+                                renderCombatCard(combat, groupACombatGrid, true);
+                            });
+                            groupAWrapper.appendChild(groupACombatGrid);
+
+                            const groupBCombatGrid = document.createElement('div');
+                            groupBCombatGrid.className = 'torneio-grid';
+                            groupB_combats.forEach(combat => {
+                                renderCombatCard(combat, groupBCombatGrid, true);
+                            });
+                            groupBWrapper.appendChild(groupBCombatGrid);
+
+                        } else { // Arena Final
+                            arenaWrapper.appendChild(roundTitle);
+                            round.combats.forEach(combat => {
+                                renderCombatCard(combat, combatsGrid, true);
+                            });
+                            arenaWrapper.appendChild(combatsGrid);
+                        }
+                    });
+                    arenaWrapper.appendChild(groupAWrapper);
+                    // Add some space between group cards
+                    arenaWrapper.appendChild(document.createElement('br'));
+                    arenaWrapper.appendChild(groupBWrapper);
+
+                } else { // Standard bracket
+                    arenaData.rounds.forEach((round, roundIndex) => {
+                        const roundTitle = document.createElement('h4');
+                        roundTitle.className = 'round-title';
+                        roundTitle.textContent = round.stage;
+                        arenaWrapper.appendChild(roundTitle);
+                        
+                        const combatsGrid = document.createElement('div');
+                        combatsGrid.className = 'torneio-grid';
+                        
+                        round.combats.forEach(combat => {
+                            renderCombatCard(combat, combatsGrid);
+                        });
+                        arenaWrapper.appendChild(combatsGrid);
+                    });
+                }
+                
+                let isComplete = isArenaComplete(arenaData);
+                if (isComplete) {
+                    const winner = getArenaWinner(arenaData);
+                    const winnerElement = document.createElement('div');
+                    winnerElement.className = 'vencedor-arena-final';
+                    winnerElement.textContent = `Vencedor da Arena: ${getCarrinhoById(winner.id).nomeEquipe}`;
+                    arenaWrapper.appendChild(winnerElement);
+                }
+                
+                if (!isComplete) allArenasComplete = false;
+                fase1CombatesContainer.appendChild(arenaWrapper);
+            });
+            
+            if (allArenasComplete) {
+                finalistasFase2 = Object.values(torneioState).map(arena => getArenaWinner(arena));
+                localStorage.setItem('finalistasFase2', JSON.stringify(finalistasFase2));
+                
+                listaVencedoresFase1.innerHTML = finalistasFase2.map(f => `<li>${f.nomeEquipe}</li>`).join('');
+                fase1VencedoresContainer.style.display = 'block';
+                document.getElementById('btn-iniciar-final').style.display = 'block';
+            }
+        }
+        
+        function renderCombatCard(combat, parentElement) {
+            const team1 = combat.team1.id ? getCarrinhoById(combat.team1.id) : null;
+            const team2 = combat.team2.id ? getCarrinhoById(combat.team2.id) : null;
+            
+            const combatCard = document.createElement('div');
+            combatCard.className = 'combat-card';
+            
+            if (combat.winner) {
+                combatCard.classList.add('combate-vencedor');
+                combatCard.innerHTML = `<div class="champion-banner">Vencedor: ${getCarrinhoById(combat.winner.id).nomeEquipe}</div>`;
+            } else if (team1 && team2) {
+                combatCard.innerHTML = `
+                    <h4>Combate</h4>
+                    <div class="combat-details">
+                        <div class="combat-team">
+                            <p>${team1.nomeEquipe}</p>
+                            <span class="round-counter">(${combat.rounds[0]})</span>
+                        </div>
+                        <span class="vs-separator">vs</span>
+                        <div class="combat-team">
+                            <p>${team2.nomeEquipe}</p>
+                            <span class="round-counter">(${combat.rounds[1]})</span>
+                        </div>
+                    </div>
+                    <div class="combat-actions">
+                        <button class="btn-vencedor-round" data-combat-id="${combat.id}" data-team-id="${team1.id}">Vencedor do Round: ${team1.nomeEquipe}</button>
+                        <button class="btn-vencedor-round" data-combat-id="${combat.id}" data-team-id="${team2.id}">Vencedor do Round: ${team2.nomeEquipe}</button>
+                    </div>
+                `;
+            } else if (team1 && !team2) { // Bye
+                combatCard.classList.add('combate-bye');
+                combatCard.innerHTML = `
+                    <h4>Combate</h4>
+                    <div class="combat-details">
+                        <div class="combat-team">
+                            <p>${team1.nomeEquipe}</p>
+                        </div>
+                        <span class="vs-separator">vs</span>
+                        <div class="combat-team">
+                            <p>BYE</p>
+                        </div>
+                    </div>
+                    <div class="champion-banner">Vencedor: ${team1.nomeEquipe} (Bye)</div>
+                `;
+            } else { // Placeholder
+                combatCard.className += ' combate-vazio';
+                combatCard.innerHTML = `<p>${combat.team1.nomeEquipe} vs ${combat.team2.nomeEquipe}</p>`;
+            }
+            parentElement.appendChild(combatCard);
+        }
+
+        function isArenaComplete(arenaData) {
+            const lastRound = arenaData.rounds[arenaData.rounds.length - 1];
+            if (!lastRound) return false;
+            return lastRound.combats.every(c => c.winner !== null);
+        }
+
+        function getArenaWinner(arenaData) {
+            const lastRound = arenaData.rounds[arenaData.rounds.length - 1];
+            return lastRound.combats[0].winner;
+        }
+
+        btnSortearCombates.addEventListener('click', sortearCombates);
+        
+        fase1CombatesContainer.addEventListener('click', (e) => {
+            if (e.target.classList.contains('btn-vencedor-round')) {
+                const combatId = e.target.dataset.combatId;
+                const teamId = parseInt(e.target.dataset.teamId);
+                
+                let combat = findCombatById(combatId);
+                if (!combat) return;
+                
+                const teamIndex = combat.team1.id === teamId ? 0 : 1;
+                combat.rounds[teamIndex]++;
+                
+                if (combat.rounds[teamIndex] === 2) {
+                    combat.winner = getCarrinhoById(teamId);
+                    advanceWinner(combat);
+                }
+                
+                localStorage.setItem('torneioState', JSON.stringify(torneioState));
+                renderFase1();
+            }
+        });
+        
+        function findCombatById(combatId) {
+            for (const arenaId in torneioState) {
+                for (const round of torneioState[arenaId].rounds) {
+                    for (const combat of round.combats) {
+                        if (combat.id === combatId) {
+                            return combat;
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+        
+        // Função para avançar o vencedor para o próximo combate
+        function advanceWinner(combat) {
+            const combatIdParts = combat.id.split('-');
+            const arenaId = parseInt(combatIdParts[1]);
+            const roundIndex = parseInt(combatIdParts[3]);
+            const combatIndex = parseInt(combatIdParts[5]);
+            
+            const arenaData = torneioState[arenaId];
+            
+            if (arenaId === 4) {
+                if (roundIndex === 0 && combatIndex === 0) { // Play-in A
+                    arenaData.rounds[1].combats[0].team1 = combat.winner;
+                } else if (roundIndex === 0 && combatIndex === 1) { // Play-in B
+                    arenaData.rounds[1].combats[2].team1 = combat.winner;
+                } else if (roundIndex === 1 && combatIndex === 0) { // Semi A1
+                    arenaData.rounds[2].combats[0].team1 = combat.winner;
+                } else if (roundIndex === 1 && combatIndex === 1) { // Semi A2
+                    arenaData.rounds[2].combats[0].team2 = combat.winner;
+                } else if (roundIndex === 1 && combatIndex === 2) { // Semi B1
+                    arenaData.rounds[2].combats[1].team1 = combat.winner;
+                } else if (roundIndex === 1 && combatIndex === 3) { // Semi B2
+                    arenaData.rounds[2].combats[1].team2 = combat.winner;
+                } else if (roundIndex === 2 && combatIndex === 0) { // Final A
+                    arenaData.rounds[3].combats[0].team1 = combat.winner;
+                } else if (roundIndex === 2 && combatIndex === 1) { // Final B
+                    arenaData.rounds[3].combats[0].team2 = combat.winner;
+                }
+            } else { // Arenas 1, 2, 3
+                const nextRoundIndex = roundIndex + 1;
+                const nextCombatIndex = Math.floor(combatIndex / 2);
+                
+                const nextRound = arenaData.rounds[nextRoundIndex];
+                if (!nextRound) {
+                    return;
+                }
+                
+                const nextCombat = nextRound.combats[nextCombatIndex];
+                if (combatIndex % 2 === 0) {
+                    nextCombat.team1 = combat.winner;
+                } else {
+                    nextCombat.team2 = combat.winner;
+                }
+            }
+        }
+
+        // --- Seção do Torneio Fase 2 ---
+        const finalCombatesContainer = document.getElementById('final-combates');
+        const finalPlacaresContainer = document.getElementById('final-placares');
+        const btnIniciarFinal = document.getElementById('btn-iniciar-final');
+        
+        btnIniciarFinal.addEventListener('click', () => {
+            if (finalistasFase2.length !== 4) {
+                 alert("A Fase 2 requer 4 finalistas das Arenas.");
+                 return;
+            }
+            
+            // Generate round-robin matches
+            const teams = finalistasFase2;
+            const finalMatches = [];
+            const wins = {};
+            for (let i = 0; i < teams.length; i++) {
+                wins[teams[i].id] = 0;
+                for (let j = i + 1; j < teams.length; j++) {
+                    finalMatches.push({
+                        id: `final-match-${i}-${j}`,
+                        team1: teams[i],
+                        team2: teams[j],
+                        rounds: [0, 0],
+                        winner: null
+                    });
+                }
+            }
+            
+            finalCombates = finalMatches;
+            finalWins = wins;
+            finalRanking = null;
+            
+            localStorage.setItem('finalCombates', JSON.stringify(finalCombates));
+            localStorage.setItem('finalWins', JSON.stringify(finalWins));
+            localStorage.removeItem('finalRanking');
+            
+            renderFase2();
+        });
+        
+        function renderFase2() {
+            finalCombatesContainer.innerHTML = '';
+            finalPlacaresContainer.style.display = 'none';
+            btnIniciarFinal.style.display = 'none';
+
+            if (finalRanking) {
+                renderFinalRanking();
+                return;
+            }
+
+            btnIniciarFinal.style.display = (finalistasFase2.length === 4 && !finalCombates) ? 'block' : 'none';
+
+            if (finalCombates) {
+                let allMatchesComplete = true;
+                finalCombates.forEach(combate => {
+                    const team1 = getCarrinhoById(combate.team1?.id);
+                    const team2 = getCarrinhoById(combate.team2?.id);
+                    
+                    const combatCard = document.createElement('div');
+                    combatCard.className = 'combat-card';
+                    
+                    if (combate.winner) {
+                        combatCard.innerHTML = `<div class="champion-banner">Vencedor: ${getCarrinhoById(combate.winner.id).nomeEquipe}</div>`;
+                    } else if (team1 && team2) {
+                        allMatchesComplete = false;
+                        combatCard.innerHTML = `
+                            <h4>${team1.nomeEquipe} vs ${team2.nomeEquipe}</h4>
+                            <div class="combat-details">
+                                <div class="combat-team">
+                                    <p>${team1.nomeEquipe}</p>
+                                    <span class="round-counter">(${combate.rounds[0]})</span>
+                                </div>
+                                <span class="vs-separator">vs</span>
+                                <div class="combat-team">
+                                    <p>${team2.nomeEquipe}</p>
+                                    <span class="round-counter">(${combate.rounds[1]})</span>
+                                </div>
+                            </div>
+                            <div class="combat-actions">
+                                <button class="btn-vencedor-final-round" data-match-id="${combate.id}" data-team-id="${team1.id}">Vencedor Round: ${team1.nomeEquipe}</button>
+                                <button class="btn-vencedor-final-round" data-match-id="${combate.id}" data-team-id="${team2.id}">Vencedor Round: ${team2.nomeEquipe}</button>
+                            </div>
+                        `;
+                    } else {
+                        allMatchesComplete = false;
+                        combatCard.innerHTML = `<p class="text-gray-500">Aguardando times</p>`;
+                    }
+                    finalCombatesContainer.appendChild(combatCard);
+                });
+                
+                if (allMatchesComplete) {
+                    calculateFinalRanking();
+                    renderFase2(); // Re-render to show the ranking
+                }
+
+            } else {
+                 finalCombatesContainer.innerHTML = '<p style="text-align: center; color: #888;">Complete a Fase 1 para definir os finalistas.</p>';
+            }
+        }
+        
+        function renderFinalRanking() {
+            finalCombatesContainer.innerHTML = '';
+            btnIniciarFinal.style.display = 'none';
+            finalPlacaresContainer.style.display = 'block';
+
+            let tableHTML = `
+                <h3>Classificação Final</h3>
+                <table class="classificacao-final">
+                    <thead>
+                        <tr>
+                            <th>Posição</th>
+                            <th>Equipe</th>
+                            <th>Vitórias</th>
+                            <th>Pontos (Desfile)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            finalRanking.forEach((equipe, index) => {
+                let rowClass = '';
+                if (index === 0) rowClass = 'first-place';
+                else if (index === 1) rowClass = 'second-place';
+                else if (index === 2) rowClass = 'third-place';
+                
+                tableHTML += `
+                    <tr class="${rowClass}">
+                        <td>${index + 1}º</td>
+                        <td>${equipe.nomeEquipe}</td>
+                        <td>${equipe.wins}</td>
+                        <td>${equipe.desfileScore}</td>
+                    </tr>
+                `;
+            });
+
+            tableHTML += `</tbody></table>`;
+            finalPlacaresContainer.innerHTML = tableHTML;
+        }
+
+        function calculateFinalRanking() {
+            const rankedTeams = finalistasFase2.map(team => ({
+                ...team,
+                wins: finalWins[team.id] || 0,
+                desfileScore: calcularTotal(team.id)
+            }));
+
+            rankedTeams.sort((a, b) => {
+                if (b.wins !== a.wins) {
+                    return b.wins - a.wins;
+                }
+                return b.desfileScore - a.desfileScore; // Tiebreaker
+            });
+
+            finalRanking = rankedTeams;
+            localStorage.setItem('finalRanking', JSON.stringify(finalRanking));
+            localStorage.removeItem('finalCombates');
+            localStorage.removeItem('finalWins');
+        }
+
+        finalCombatesContainer.addEventListener('click', (e) => {
+            const button = e.target.closest('.btn-vencedor-final-round');
+            if (!button) return;
+
+            const matchId = button.dataset.matchId;
+            const teamId = parseInt(button.dataset.teamId);
+            
+            const combat = finalCombates.find(c => c.id === matchId);
+            if (!combat || combat.winner) return;
+
+            const teamIndex = combat.team1.id === teamId ? 0 : 1;
+            combat.rounds[teamIndex]++;
+            
+            if (combat.rounds[teamIndex] === 2) {
+                 combat.winner = getCarrinhoById(teamId);
+                 finalWins[teamId]++;
+            }
+            
+            localStorage.setItem('finalCombates', JSON.stringify(finalCombates));
+            localStorage.setItem('finalWins', JSON.stringify(finalWins));
+            renderFase2();
+        });
+
+        // --- Inicialização ---
+        renderCarrinhos();
+    });
+</script>
+
+</body>
+</html>
+
